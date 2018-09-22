@@ -1,3 +1,6 @@
+
+import java.io.File;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,7 +18,8 @@ public class Client {
      */
     public static void main(String[] args) {
         System.out.println(Recursion.harmonic(5));
-        Recursion.fecthDataFromPath();
+        File root = new File("C:\\");
+        Recursion.printTree(root);
     }
     
 }
