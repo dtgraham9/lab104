@@ -94,27 +94,20 @@ public class Client {
         boolean statusCheck = true;
         String path;
         while(statusCheck){
-            path = JOptionPane.showInputDialog(null,"Please enter file path", "print directory tree");
-            File file;
-            Scanner scan;
-            try{
-                file = new File(path);
-                scan = new Scanner(file);
+            path = JOptionPane.showInputDialog(null,"Please enter file path");
+            System.out.println(path);
+            File file = new File(path);
+                if(!(file.isDirectory())){
+                    JOptionPane.showMessageDialog(null, "That is a file, please enter valid path to directory");
+                    runPrintTree();
+                }
+                Recursion.printTree(file);
+                statusCheck = false;
             }
-            catch(FileNotFoundException e){
-                JOptionPane.showMessageDialog(null, "Not a valid file location, please enter valid path");
-                runPrintTree();
-            }
-            file = new File(path);
-            if(!(file.isDirectory())){
-                JOptionPane.showMessageDialog(null, "That is a file, please enter valid path to directory");
-                runPrintTree();
-            }
-            Recursion.printTree(file);
-            statusCheck = false;
-        }
+            
     }
     
+   
     public static void menuSelector(){
         boolean statusCheck = false;
         while(!(statusCheck)){
