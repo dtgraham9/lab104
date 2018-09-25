@@ -5,7 +5,8 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 /**
  *
- * @author Graham
+ * @author Graham Thompson
+ * @version
  */
 public class Client {
 
@@ -14,23 +15,29 @@ public class Client {
     }
     
     public static boolean confirmExit(){
-        int option = JOptionPane.showConfirmDialog(null,null,"Are you sure you want to exit?", 0);
+        int option = JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?","exit", JOptionPane.YES_NO_OPTION);
         return JOptionPane.YES_OPTION == option;
     }
     
     public static void runHarmonic(){
+        System.out.println("Testing Harmonic calculator");
         boolean statusCheck = true;
         int result = 0;
         while(statusCheck){
-            String input = JOptionPane.showInputDialog(null,"Please enter in a integer number", "Harmonic Calculator");
+            String input = JOptionPane.showInputDialog(null,"Please enter in a integer number");
+            if(input == null)
+                break;
             try{
                 result = Integer.parseInt(input);
             }
             catch (NumberFormatException e){
+                System.out.println("Invalid parameter: " + input);
                 JOptionPane.showMessageDialog(null, "Not an integer value, please enter integer");
                 runHarmonic();
             }
+            System.out.println("Valid parameter: " + result);
             double harmonic = Recursion.harmonic(result);
+            System.out.println("Output: "+ harmonic);
             JOptionPane.showMessageDialog(null, Double.toString(harmonic));
             statusCheck = false;
         }
@@ -54,11 +61,14 @@ public class Client {
     
     
     public static void runIsabel(){
+        System.out.println("Isabel sum");
         boolean statusCheck = true;
         String path;
         ArrayBag<Integer> integers = new ArrayBag();
         while(statusCheck){
-            path = JOptionPane.showInputDialog(null,"Please enter file path", "Isabel sum");
+            path = JOptionPane.showInputDialog(null,"Please enter file path");
+            if(path == null)
+                break;
             File file;
             Scanner scan = null;
             try {
@@ -67,40 +77,52 @@ public class Client {
                 
             }
             catch(FileNotFoundException e){
+                System.out.println("Invalid path: " + path);
                 JOptionPane.showMessageDialog(null, "Not a valid file location, please enter valid path");
                 runIsabel();
             }
             while(scan.hasNext()){
-                    integers.add(scan.nextInt());
+                    try {
+                        integers.add(Integer.parseInt(scan.next()));
+                    }
+                    catch (NumberFormatException e){
+                        
+                    }
             }
             if(!(isPowerOfTwo(integers.getCurrentSize()))){
+                System.out.println("Array not a power of two: " + integers.getCurrentSize());
                 JOptionPane.showMessageDialog(null, "Array is not a power of two, please enter valid path of int array that contains length that is power of two");
                 runIsabel();
             }
+            System.out.println("input: "+ integers.toString());
             int[] B = new int[integers.getCurrentSize()/2];
-            int[] C = Recursion.isabel(integers.getCurrentSize()-1, integers.getIntArray(), B);
+            int[] C = Recursion.isabel(integers.getCurrentSize()/2-1, integers.getIntArray(), B);
             String output = "";
             for(int i = 0; C.length-1> i; i++){
                 output+= C[i] + ", ";
             }
             output+= C[C.length-1];
-            JOptionPane.showMessageDialog(null, output);
+            System.out.println("Output: " + output);
             statusCheck = false;
             
         }
     }
     
     public static void runPrintTree(){
+        System.out.println("Print tree");
         boolean statusCheck = true;
         String path;
         while(statusCheck){
             path = JOptionPane.showInputDialog(null,"Please enter file path");
-            System.out.println(path);
+            if(null == path)
+                break;
             File file = new File(path);
                 if(!(file.isDirectory())){
-                    JOptionPane.showMessageDialog(null, "That is a file, please enter valid path to directory");
+                    System.out.println("Invalid path: " + path);
+                    JOptionPane.showMessageDialog(null, "This is not a valid, please enter valid path to directory");
                     runPrintTree();
                 }
+                System.out.println("Path: " + path);
                 Recursion.printTree(file);
                 statusCheck = false;
             }
@@ -113,27 +135,36 @@ public class Client {
         while(!(statusCheck)){
             String optionString = "A to run harmonic calculator\nB to run Isabel's sum\nC to run print out file directory\nD to exit"; 
             String response = JOptionPane.showInputDialog(null,optionString);
-        switch ( response ) 
-        {
-            case "a" :
-            case "A" :
-                runHarmonic();
-                break;
-            case "b" :
-            case "B" :
-                runIsabel();
-                break;
-            case "c" :
-            case "C" :    
-                runPrintTree();
-                break;
-            case "d":
-            case "D":
+            if(null == response){
                 statusCheck = confirmExit();
-                break;
-            default :
-                
-        }    
+                if(statusCheck)
+                    break;
+                else 
+                    continue;
+            }
+            
+            switch ( response ) 
+            {
+                case "a" :
+                case "A" :
+                    runHarmonic();
+                    break;
+                case "b" :
+                case "B" :
+                    runIsabel();
+                    break;
+                case "c" :
+                case "C" :    
+                    runPrintTree();
+                    break;
+                case "d":
+                case "D":
+                    statusCheck = confirmExit();
+                    break;
+                default :
+                    noOptionSelected();
+                    break;
+            }    
         }
     }
     

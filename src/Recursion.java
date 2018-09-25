@@ -21,7 +21,7 @@ public class Recursion {
     
     public static int[] isabel(int length,int[] a, int[] answer){
         if(length >=0){
-            answer[length]= a[length+1]+a[length];
+            answer[length]= a[length*2+1]+a[length*2];
             return isabel(--length,a, answer);
         }
         else{
