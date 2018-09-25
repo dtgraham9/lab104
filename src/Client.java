@@ -38,16 +38,19 @@ public class Client {
         boolean statusCheck = true;
         int result = 0;
         while(statusCheck){
-            String input = JOptionPane.showInputDialog(null,"Please enter in a integer number");
-            if(input == null)
+            String input = JOptionPane.showInputDialog(null,"Please enter in a integer number","Harmonic Calculator", JOptionPane.OK_CANCEL_OPTION);
+            if(input == null){
+                statusCheck = false;
                 break;
+            }
+            
             try{
                 result = Integer.parseInt(input);
             }
             catch (NumberFormatException e){
                 System.out.println("Invalid parameter: " + input);
                 JOptionPane.showMessageDialog(null, "Not an integer value, please enter integer");
-                runHarmonic();
+                break;
             }
             System.out.println("Valid parameter: " + result);
             double harmonic = Recursion.harmonic(result);
@@ -55,7 +58,8 @@ public class Client {
             JOptionPane.showMessageDialog(null, Double.toString(harmonic));
             statusCheck = false;
         }
-        
+        if(statusCheck)
+            runHarmonic();
     }
     /**
      * Checks to ensure a number is the power of two
@@ -90,32 +94,41 @@ public class Client {
         ArrayBag<Integer> integers = new ArrayBag();
         while(statusCheck){
             path = JOptionPane.showInputDialog(null,"Please enter file path");
-            if(path == null)
+            if(path == null){
+                statusCheck = false;
                 break;
+            }
             File file;
             Scanner scan = null;
             try {
                 file = new File(path);
                 scan = new Scanner(file).useDelimiter(" ");
+                System.out.println("Valid path: " + path);
                 
             }
             catch(FileNotFoundException e){
                 System.out.println("Invalid path: " + path);
                 JOptionPane.showMessageDialog(null, "Not a valid file location, please enter valid path");
-                runIsabel();
+                break;
             }
-            while(scan.hasNext()){
+            try{
+                while(scan.hasNext()){
                     try {
                         integers.add(Integer.parseInt(scan.next()));
                     }
                     catch (NumberFormatException e){
                         
                     }
+                }
             }
+            catch(NullPointerException e){
+                    
+                    }
+            
             if(!(isPowerOfTwo(integers.getCurrentSize()))){
                 System.out.println("Array not a power of two: " + integers.getCurrentSize());
                 JOptionPane.showMessageDialog(null, "Array is not a power of two, please enter valid path of int array that contains length that is power of two");
-                runIsabel();
+                break;
             }
             System.out.println("input: "+ integers.toString());
             int[] B = new int[integers.getCurrentSize()/2];
@@ -129,6 +142,8 @@ public class Client {
             statusCheck = false;
             
         }
+        if(statusCheck)
+            runIsabel();
     }
     
     /**
@@ -141,19 +156,22 @@ public class Client {
         String path;
         while(statusCheck){
             path = JOptionPane.showInputDialog(null,"Please enter file path");
-            if(null == path)
+            if(null == path){
+                statusCheck = false;
                 break;
+            }
             File file = new File(path);
                 if(!(file.isDirectory())){
                     System.out.println("Invalid path: " + path);
                     JOptionPane.showMessageDialog(null, "This is not a valid, please enter valid path to directory");
-                    runPrintTree();
+                    break;
                 }
                 System.out.println("Path: " + path);
                 Recursion.printTree(file);
                 statusCheck = false;
             }
-            
+        if(statusCheck)
+            runPrintTree();
     }
     
    /**
